@@ -22,7 +22,8 @@ public class Robot extends IterativeRobot {
     final String customAuto = "My Auto";
     String autoSelected;
     SendableChooser chooser;
-    CANTalon fRight, bRight, fLeft, bLeft;
+    CANTalon fRight, bRight, fLeft, bLeft, lShooter, rShooter;
+    Shooter myShooter;
     Joystick lJoystick, rJoystick;
     RobotDrive myRobot;
     /**
@@ -38,9 +39,12 @@ public class Robot extends IterativeRobot {
         bRight = new CANTalon(3);
         fLeft = new CANTalon(4);
         bLeft = new CANTalon(5);
+        lShooter = new CANTalon(6);
+        rShooter = new CANTalon(7);
         lJoystick = new Joystick(1);
         rJoystick = new Joystick(2);
         myRobot = new RobotDrive(bLeft, fLeft, bRight, fRight);
+        myShooter = new Shooter(lShooter, rShooter);
         
     }
     
