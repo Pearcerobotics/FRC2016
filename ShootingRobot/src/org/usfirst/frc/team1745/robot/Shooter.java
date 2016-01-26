@@ -15,8 +15,8 @@ public class Shooter {
 	 * 
 	 */
 	CANTalon lMotor,rMotor;
-	private enum Mode{INTAKE, SHOOTING, OFF};
-	private Mode mode;
+	private enum Mode{INTAKE, SHOOTING, OFF}; // 3 ways that the shooting wheels can be enabled
+	private Mode mode;// the mode currently selected
 	private double speed; // the speed of the wheels
 	private double shootSpeed; // the speed when in shooting mode
 	private double intakeSpeed; // the speed the wheels go when intaking
@@ -31,9 +31,11 @@ public class Shooter {
 		super();
 		this.lMotor = lMotor;
 		this.rMotor = rMotor;
-		lMotor.changeControlMode(CANTalon.TalonControlMode.Speed);
+		lMotor.changeControlMode(CANTalon.TalonControlMode.Speed); // set talons to be set by speed
         rMotor.changeControlMode(CANTalon.TalonControlMode.Speed);
-        lMotor.enableBrakeMode(true);
+        rMotor.reverseSensor(true);// reverse the Right motor sensor
+        rMotor.reverseOutput(true); //reverse the right motor output
+        lMotor.enableBrakeMode(true); //enable fast breaking
         rMotor.enableBrakeMode(true);
         this.setMode(Mode.OFF);
 	}
@@ -76,6 +78,10 @@ public class Shooter {
 	 */
 	public void setShootSpeed(double shootSpeed) {
 		this.shootSpeed = shootSpeed;
+		if(this.getMode() == Mode.SHOOTING)
+		{
+			this.setSpeed(shootSpeed);
+		}
 	}
 	/**
 	 * @return the speed
@@ -98,14 +104,25 @@ public class Shooter {
 	 */
 	public double getIntakeSpeed() {
 		return intakeSpeed;
+		
 	}
 	/**
 	 * @param intakeSpeed the intakeSpeed to set
 	 */
 	public void setIntakeSpeed(double intakeSpeed) {
 		this.intakeSpeed = intakeSpeed;
+		if(this.getMode() == Mode.INTAKE)
+		{
+			this.setSpeed(intakeSpeed);
+		}
 	}
 	
+	public double getLeftSensorSpeed() {
+		return lMotor.getEncVelocity();		
+	}
+	public double getRightSensorSpeed() {
+		return rMotor.getEncVelocity();		
+	}
 	
 	
 	
