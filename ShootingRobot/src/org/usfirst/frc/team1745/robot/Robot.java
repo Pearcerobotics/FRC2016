@@ -61,6 +61,8 @@ public class Robot extends IterativeRobot {
     	autoSelected = (String) chooser.getSelected();
 //		autoSelected = SmartDashboard.getString("Auto Selector", defaultAuto);
 		System.out.println("Auto selected: " + autoSelected);
+        myShooter.setIntakeSpeed(-1);
+        myShooter.setShootSpeed(1);
     }
 
     /**
@@ -83,6 +85,12 @@ public class Robot extends IterativeRobot {
      */
     public void teleopPeriodic() {
         myRobot.tankDrive(lJoystick, rJoystick);
+        myShooter.setMode(Shooter.Mode.INTAKE);
+        myShooter.setShootSpeed(rJoystick.getThrottle());
+        if(rJoystick.getTrigger(null))
+        {
+        	myShooter.setMode(Shooter.Mode.SHOOTING);
+        }
         
     }
     
