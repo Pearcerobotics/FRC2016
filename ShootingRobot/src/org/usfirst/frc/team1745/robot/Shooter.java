@@ -12,10 +12,9 @@ import edu.wpi.first.wpilibj.CANTalon;
 public class Shooter {
 
 	/**
-	 * 
 	 */
 	CANTalon lMotor,rMotor;
-	private enum Mode{INTAKE, SHOOTING, OFF}; // 3 ways that the shooting wheels can be enabled
+	public enum Mode{INTAKE, SHOOTING, OFF}; // 3 ways that the shooting wheels can be enabled
 	private Mode mode;// the mode currently selected
 	private double speed; // the speed of the wheels
 	private double shootSpeed; // the speed when in shooting mode
@@ -93,6 +92,7 @@ public class Shooter {
 	 * @param speed the speed to set
 	 */
 	private void setSpeed(double speed) {
+		// look at http://www.ctr-electronics.com/Talon%20SRX%20Software%20Reference%20Manual.pdf for Speed documentation
 		if(speed < -1) speed = -1; // prevent out of bounds on Speed
 		if(speed > 1) speed =1;
 		this.speed = speed;
