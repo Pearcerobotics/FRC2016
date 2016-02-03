@@ -13,7 +13,8 @@ public class Shooter {
 
 	/**
 	 */
-	CANTalon lMotor,rMotor;
+	CANTalon lMotor,rMotor, aMotor;
+	Arm arm;
 	public enum Mode{INTAKE, SHOOTING, OFF}; // 3 ways that the shooting wheels can be enabled
 	private Mode mode;// the mode currently selected
 	private double speed; // the speed of the wheels
@@ -26,10 +27,11 @@ public class Shooter {
 	 * @param lMotor
 	 * @param rMotor
 	 */
-	public Shooter(CANTalon lMotor, CANTalon rMotor) {
+	public Shooter(CANTalon lMotor, CANTalon rMotor, CANTalon aMotor) {
 		super();
 		this.lMotor = lMotor;
 		this.rMotor = rMotor;
+		this.aMotor = aMotor;
 		lMotor.changeControlMode(CANTalon.TalonControlMode.Speed); // set talons to be set by speed
         rMotor.changeControlMode(CANTalon.TalonControlMode.Speed);
         rMotor.reverseSensor(true);// reverse the Right motor sensor
@@ -37,6 +39,7 @@ public class Shooter {
         lMotor.enableBrakeMode(true); //enable fast breaking
         rMotor.enableBrakeMode(true);
         this.setMode(Mode.OFF);
+        arm = new Arm(this.aMotor, 30.3475);
 	}
 	/**
 	 * @return the mode

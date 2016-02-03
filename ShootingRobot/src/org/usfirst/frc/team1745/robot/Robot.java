@@ -2,11 +2,11 @@
 package org.usfirst.frc.team1745.robot;
 
 import edu.wpi.first.wpilibj.CANTalon;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Joystick.AxisType;
 import edu.wpi.first.wpilibj.RobotDrive;
-import edu.wpi.first.wpilibj.TalonSRX;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -22,10 +22,11 @@ public class Robot extends IterativeRobot {
     final String customAuto = "My Auto";
     String autoSelected;
     SendableChooser chooser;
-    CANTalon fRight, bRight, fLeft, bLeft, lShooter, rShooter;
+    CANTalon fRight, bRight, fLeft, bLeft, lShooter, rShooter, aMotor;
     Shooter myShooter;
-    Joystick lJoystick, rJoystick;
+    Joystick lJoystick, rJoystick, sJoystick;
     RobotDrive myRobot;
+    BallDetector ballDetector;
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
@@ -35,16 +36,19 @@ public class Robot extends IterativeRobot {
         chooser.addDefault("Default Auto", defaultAuto);
         chooser.addObject("My Auto", customAuto);
         SmartDashboard.putData("Auto choices", chooser);
-        fRight = new CANTalon(2);
-        bRight = new CANTalon(3);
-        fLeft = new CANTalon(4);
-        bLeft = new CANTalon(5);
-        lShooter = new CANTalon(6);
-        rShooter = new CANTalon(7);
-        lJoystick = new Joystick(1);
-        rJoystick = new Joystick(2);
+        fRight = new CANTalon(3);
+        bRight = new CANTalon(4);
+        fLeft = new CANTalon(5);
+        bLeft = new CANTalon(6);
+        lShooter = new CANTalon(7);
+        rShooter = new CANTalon(8);
+        aMotor = new CANTalon(9);
+        lJoystick = new Joystick(0);
+        rJoystick = new Joystick(1);
+        sJoystick = new Joystick(2);
         myRobot = new RobotDrive(bLeft, fLeft, bRight, fRight);
-        myShooter = new Shooter(lShooter, rShooter);
+        myShooter = new Shooter(lShooter, rShooter, aMotor);
+        ballDetector = new BallDetector(0);
         
     }
     
@@ -71,7 +75,7 @@ public class Robot extends IterativeRobot {
     public void autonomousPeriodic() {
     	switch(autoSelected) {
     	case customAuto:
-        //Put custom auto code here   
+        //Put custom auto code here
             break;
     	case defaultAuto:
     	default:
@@ -84,10 +88,10 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
-        myRobot.tankDrive(lJoystick, rJoystick);
+        myRobot.tankDrive(rJoystick, lJoystick);
         myShooter.setMode(Shooter.Mode.INTAKE);
-        myShooter.setShootSpeed(rJoystick.getThrottle());
-        if(rJoystick.getTrigger(null))
+        myShooter.setShootSpeed(sJoystick.getAxis(AxisType.kY));
+        if(sJoystick.getTrigger(null))
         {
         	myShooter.setMode(Shooter.Mode.SHOOTING);
         }
