@@ -39,7 +39,7 @@ public class Shooter {
         lMotor.enableBrakeMode(true); //enable fast breaking
         rMotor.enableBrakeMode(true);
         this.setMode(Mode.OFF);
-        arm = new Arm(this.aMotor, 30.3475);
+        arm = new Arm(this.aMotor);
 	}
 	/**
 	 * @return the mode

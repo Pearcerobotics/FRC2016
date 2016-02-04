@@ -1,11 +1,12 @@
 package org.usfirst.frc.team1745.robot;
 
 import edu.wpi.first.wpilibj.CANTalon;
+import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 
 public class Arm {
 private CANTalon arm; 
 private double defaultPos;
-private double currentPos;
+private double currentPos = 0;
 private double targetPos; 
 private boolean beenReset;
 	public Arm(CANTalon inputArm) {
@@ -18,9 +19,8 @@ private boolean beenReset;
 	public void setPos(double pos)//sets the position of the arm
 	{
 		if(!beenReset) return;//Make sure to do this for all methods in arm
-		
-		
 		arm.setPosition(pos);
+		currentPos += pos;
 	}
 	public double getPos()//gets the position of the arm
 	{
