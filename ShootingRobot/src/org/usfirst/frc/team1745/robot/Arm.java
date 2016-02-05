@@ -2,17 +2,19 @@ package org.usfirst.frc.team1745.robot;
 
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 
 public class Arm {
 private CANTalon arm; 
-private double defaultPos;
 private double currentPos = 0;
-private double targetPos; 
+private double targetPos;
 private boolean beenReset;
-	public Arm(CANTalon inputArm) {
+private double voltage;
+private double current;
+	public Arm(P51Talon inputArm) {
 		arm=inputArm;
 		arm.changeControlMode(CANTalon.TalonControlMode.Position);
-		beenReset = false;	
+		beenReset = false;
 		
 		// TODO Auto-generated constructor scrub
 	}
@@ -28,7 +30,8 @@ private boolean beenReset;
 	}
 	private void setPosToDefault()//sets the position of the arm to the default position
 	{
-		arm.setPosition(defaultPos);
+		arm.setPosition(-currentPos);
+		currentPos = 0;
 	}
 
 }

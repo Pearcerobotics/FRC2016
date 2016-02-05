@@ -1,6 +1,9 @@
 
 package org.usfirst.frc.team1745.robot;
 
+import org.usfirst.frc.team1745.robot.P51Talon.Breakers;
+import org.usfirst.frc.team1745.robot.P51Talon.Motors;
+
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -22,11 +25,12 @@ public class Robot extends IterativeRobot {
     final String customAuto = "My Auto";
     String autoSelected;
     SendableChooser chooser;
-    CANTalon fRight, bRight, fLeft, bLeft, lShooter, rShooter, aMotor;
+    P51Talon fRight, bRight, fLeft, bLeft, lShooter, rShooter, aMotor;
     Shooter myShooter;
     Joystick lJoystick, rJoystick, sJoystick;
     RobotDrive myRobot;
     BallDetector ballDetector;
+   
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
@@ -36,20 +40,19 @@ public class Robot extends IterativeRobot {
         chooser.addDefault("Default Auto", defaultAuto);
         chooser.addObject("My Auto", customAuto);
         SmartDashboard.putData("Auto choices", chooser);
-        fRight = new CANTalon(3);
-        bRight = new CANTalon(4);
-        fLeft = new CANTalon(5);
-        bLeft = new CANTalon(6);
-        lShooter = new CANTalon(7);
-        rShooter = new CANTalon(8);
-        aMotor = new CANTalon(9);
+        fRight = new P51Talon(3, "Forward Right Motor", Motors.CIM, Breakers.amp40, 3);
+        bRight = new P51Talon(4, "Back Right Motor", Motors.CIM, Breakers.amp40, 2 );
+        fLeft = new P51Talon(5, "Forward Left Motor", Motors.CIM, Breakers.amp40, 1);
+        bLeft = new P51Talon(6, "Back Left Motor", Motors.CIM, Breakers.amp40, 0);
+        lShooter = new P51Talon(7,"Left Shooter", Motors.miniCIM, Breakers.amp40, 12);
+        rShooter = new P51Talon(8, "Right Shooter", Motors.miniCIM, Breakers.amp40,13);
+        aMotor = new P51Talon(9, "Arm Motor", Motors.WC775Pro, Breakers.amp40,14);
         lJoystick = new Joystick(0);
         rJoystick = new Joystick(1);
         sJoystick = new Joystick(2);
-        myRobot = new RobotDrive(bLeft, fLeft, bRight, fRight);
-        myShooter = new Shooter(lShooter, rShooter, aMotor);
         ballDetector = new BallDetector(0);
-        
+        myRobot = new RobotDrive(bLeft, fLeft, bRight, fRight);
+        myShooter = new Shooter(lShooter, rShooter, aMotor, ballDetector);        
     }
     
 	/**
@@ -57,7 +60,6 @@ public class Robot extends IterativeRobot {
 	 * using the dashboard. The sendable chooser code works with the Java SmartDashboard. If you prefer the LabVIEW
 	 * Dashboard, remove all of the chooser code and uncomment the getString line to get the auto name from the text box
 	 * below the Gyro
-	 *
 	 * You can add additional auto modes by adding additional comparisons to the switch structure below with additional strings.
 	 * If using the SendableChooser make sure to add them to the chooser code above as well.
 	 */
