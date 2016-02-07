@@ -47,6 +47,13 @@ public class P51Talon extends CANTalon implements Sendable {
 		// TODO Auto-generated constructor stub
 	}
 	
+	/**
+	 * @param deviceNumber
+	 * @param nameV
+	 * @param motorV
+	 * @param breakerV
+	 * @param PDPport
+	 */
 	public P51Talon(int deviceNumber, String nameV, Motors motorV, Breakers breakerV, int PDPport) {
 		super(deviceNumber);
 		myName=nameV;
@@ -67,7 +74,26 @@ public class P51Talon extends CANTalon implements Sendable {
 	}
 	
 	public String toString(){
-		return "Hello World";
+		String outputString, modeString ="";
+		outputString =  this.myName + 
+					" PDPPort: " + this.myPdpPort +
+					" Current: " + this.getOutputCurrent() +
+					" Mode: " + this.getControlMode();
+		switch(this.getControlMode()){
+			case  Speed:
+				modeString = " Speed: " + this.getSpeed();
+			break;
+			case Position:
+				modeString = " Position: " + this.getEncPosition();
+			break;
+			case Voltage:
+				modeString = " Voltage: " + this.getOutputVoltage();
+			break;
+			default:
+			break;
+		}
+		outputString.concat(modeString);
+		return outputString;
 	}
 
 }

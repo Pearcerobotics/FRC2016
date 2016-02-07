@@ -5,14 +5,14 @@ import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 
 public class Arm {
-private CANTalon arm; 
+private P51Talon arm; 
 private double currentPos = 0;
 private double targetPos;
 private boolean beenReset;
 private double voltage;
 private double current;
-	public Arm(P51Talon inputArm) {
-		arm=inputArm;
+	public Arm(P51Talon aMotor) {
+		arm=aMotor;
 		arm.changeControlMode(CANTalon.TalonControlMode.Position);
 		beenReset = false;
 		

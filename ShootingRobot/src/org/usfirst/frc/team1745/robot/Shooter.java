@@ -13,9 +13,9 @@ public class Shooter {
 
 	/**
 	 */
-	CANTalon lMotor,rMotor, aMotor;
+	P51Talon lMotor,rMotor, aMotor;
 	Arm arm;
-	BallDetector balldetector;
+	BallDetector ballDetector;
 	public enum Mode{INTAKE, SHOOTING, OFF}; // 3 ways that the shooting wheels can be enabled
 	private Mode mode;// the mode currently selected
 	private double speed; // the speed of the wheels
@@ -28,12 +28,12 @@ public class Shooter {
 	 * @param lMotor
 	 * @param rMotor
 	 */
-	public Shooter(CANTalon lMotor, CANTalon rMotor, CANTalon aMotor, BallDetector ballDetector) {
+	public Shooter(P51Talon lMotor, P51Talon rMotor, P51Talon aMotor, BallDetector ballDetector) {
 		super();
 		this.lMotor = lMotor;
 		this.rMotor = rMotor;
 		this.aMotor = aMotor;
-		this.balldetector = balldetector;
+		this.ballDetector = ballDetector;
 		lMotor.changeControlMode(CANTalon.TalonControlMode.Speed); // set talons to be set by speed
         rMotor.changeControlMode(CANTalon.TalonControlMode.Speed);
         rMotor.reverseSensor(true);// reverse the Right motor sensor
@@ -123,9 +123,15 @@ public class Shooter {
 		}
 	}
 	
+	/**
+	 * @return the left motor Velocity
+	 */
 	public double getLeftSensorSpeed() {
 		return lMotor.getEncVelocity();		
 	}
+	/**
+	 * @return the right motor Velocity
+	 */
 	public double getRightSensorSpeed() {
 		return rMotor.getEncVelocity();		
 	}
