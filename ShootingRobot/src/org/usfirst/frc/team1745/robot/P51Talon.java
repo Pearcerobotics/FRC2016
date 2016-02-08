@@ -74,7 +74,7 @@ public class P51Talon extends CANTalon implements Sendable {
 	}
 	
 	public String toString(){
-		String outputString, modeString ="";
+		String outputString, modeString;
 		outputString =  this.myName + 
 					" PDPPort: " + this.myPdpPort +
 					" Current: " + this.getOutputCurrent() +
@@ -90,6 +90,7 @@ public class P51Talon extends CANTalon implements Sendable {
 				modeString = " Voltage: " + this.getOutputVoltage();
 			break;
 			default:
+				modeString ="";
 			break;
 		}
 		outputString.concat(modeString);
