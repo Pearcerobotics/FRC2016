@@ -25,7 +25,7 @@ public class Robot extends IterativeRobot {
     final String customAuto = "My Auto";
     String autoSelected;
     SendableChooser chooser;
-    P51Talon fRight, bRight, fLeft, bLeft, lShooter, rShooter, aMotor;
+    P51Talon fRight, bRight, fLeft, bLeft, lShooter, rShooter, aMotor, smotor;
     Shooter myShooter;
     Joystick lJoystick, rJoystick, sJoystick;
     RobotDrive myRobot;
