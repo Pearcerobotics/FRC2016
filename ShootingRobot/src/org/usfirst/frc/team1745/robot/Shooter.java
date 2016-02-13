@@ -13,11 +13,19 @@ public class Shooter {
 
 	/**
 	 */
-	P51Talon lMotor,rMotor, aMotor;
-	Arm arm;
-	BallDetector ballDetector;
+	private P51Talon lMotor,rMotor, aMotor;
+	private Arm arm;
+	private BallDetector ballDetector;
 	public enum Mode{INTAKE, SHOOTING, OFF}; // 3 ways that the shooting wheels can be enabled
 	private Mode mode;// the mode currently selected
+	private double wheelRadius; // radius of the wheel ( used for linear speed calculation)
+	private double encoderClicksPerTurn;// encoder clicks per rotation; 
+	public double getWheelRadius() {
+		return wheelRadius;
+	}
+	public double getEncoderClicksPerTurn() {
+		return encoderClicksPerTurn;
+	}
 	private double speed; // the speed of the wheels
 	private double shootSpeed; // the speed when in shooting mode
 	private double intakeSpeed; // the speed the wheels go when intaking
@@ -34,6 +42,8 @@ public class Shooter {
 		this.rMotor = rMotor;
 		this.aMotor = aMotor;
 		this.ballDetector = ballDetector;
+		this.encoderClicksPerTurn = 1024;
+		this.wheelRadius = 4;
 		lMotor.changeControlMode(CANTalon.TalonControlMode.Speed); // set talons to be set by speed
         rMotor.changeControlMode(CANTalon.TalonControlMode.Speed);
         rMotor.reverseSensor(true);// reverse the Right motor sensor
@@ -43,6 +53,27 @@ public class Shooter {
         this.setMode(Mode.OFF);
         arm = new Arm(this.aMotor);
         
+	}
+	/**
+	 * @return Distance Per Encoder Click in Inches
+	 */
+	public double getLinearDistancePerClick()
+	{
+		return this.getWheelRadius() / this.getEncoderClicksPerTurn();
+	}
+	/**
+	 * @return Returns the Current Linear Speed of the Shooter Wheels in Inches per second. 
+	 */
+	public double getLinearSpeed()
+	{
+		return this.getSpeed()*this.getWheelRadius()/60;
+	}
+	/**
+	 * @return Return the 
+	 */
+	public double getRPM()
+	{
+		return this.getSpeed();
 	}
 	/**
 	 * @return the mode
@@ -92,7 +123,7 @@ public class Shooter {
 	 * @return the speed
 	 */
 	public double getSpeed() {
-		return speed;
+		return this.speed;
 	}
 	/**
 	 * @param speed the speed to set
@@ -134,6 +165,22 @@ public class Shooter {
 	 */
 	public double getRightSensorSpeed() {
 		return rMotor.getEncVelocity();		
+	}
+	
+	/**
+	 *  Set the Robot to use the Ball detector to switch modes
+	 */
+	public void autoGather()
+	{
+		//if the ball is detected change to shooting mode, if its not set to intake mode.
+		if(this.ballDetector.getBallStatus())
+		{
+			this.setMode(Mode.OFF);
+		}
+		else
+		{	
+			this.setMode(Mode.INTAKE);
+		}
 	}
 	
 	
