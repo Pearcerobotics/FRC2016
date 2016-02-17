@@ -1,6 +1,8 @@
 
 package org.usfirst.frc.team1745.robot;
 
+import java.io.IOException;
+
 import org.usfirst.frc.team1745.robot.P51Talon.Breakers;
 import org.usfirst.frc.team1745.robot.P51Talon.Motors;
 
@@ -10,6 +12,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Joystick.AxisType;
 import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -30,6 +33,8 @@ public class Robot extends IterativeRobot {
     Joystick lJoystick, rJoystick, sJoystick;
     RobotDrive myRobot;
     BallDetector ballDetector;
+    private final NetworkTable grip = NetworkTable.getTable("grip");
+
    
     /**
      * This function is run when the robot is first started up and should be
@@ -53,6 +58,13 @@ public class Robot extends IterativeRobot {
         ballDetector = new BallDetector(0);
         myRobot = new RobotDrive(bLeft, fLeft, bRight, fRight);
         myShooter = new Shooter(lShooter, rShooter, aMotor, ballDetector);        
+        
+        //turn on Grip image processing
+        try {
+            new ProcessBuilder("/home/lvuser/grip").inheritIO().start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     
 	/**
@@ -69,6 +81,7 @@ public class Robot extends IterativeRobot {
 		System.out.println("Auto selected: " + autoSelected);
         myShooter.setIntakeSpeed(-1);
         myShooter.setShootSpeed(1);
+        
     }
 
     /**
