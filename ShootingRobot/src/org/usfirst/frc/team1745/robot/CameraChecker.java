@@ -12,6 +12,8 @@ public class CameraChecker {
 	/**
 	 * 
 	 */
+	private Camera camera;
+	
 	public CameraChecker() {
 		// TODO Auto-generated constructor stub
 	}

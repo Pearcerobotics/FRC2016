@@ -13,6 +13,7 @@ public class Shooter {
 
 	/**
 	 */
+	private CameraChecker checker;
 	private P51Talon lMotor,rMotor, aMotor;
 	private Arm arm;
 	private BallDetector ballDetector;
