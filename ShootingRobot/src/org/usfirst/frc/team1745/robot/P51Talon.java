@@ -4,7 +4,10 @@
 package org.usfirst.frc.team1745.robot;
 
 import edu.wpi.first.wpilibj.CANTalon;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.Sendable;
+import edu.wpi.first.wpilibj.hal.PDPJNI;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * @author robots
@@ -22,6 +25,7 @@ public class P51Talon extends CANTalon implements Sendable {
 	private Motors myMotor;
 	public enum Breakers{amp40, amp20, amp30};
 	private Breakers myBreaker;
+	private boolean direction; //false is reverse true is forward
 	
 	public P51Talon(int deviceNumber) {
 		super(deviceNumber);
@@ -95,6 +99,16 @@ public class P51Talon extends CANTalon implements Sendable {
 		}
 		outputString.concat(modeString);
 		return outputString;
+	}
+	public void toDashboard()
+	{
+		SmartDashboard.putNumber(myName + "_Current", this.getOutputCurrent());
+		SmartDashboard.putNumber(myName + "_Voltage", this.getOutputVoltage());
+		SmartDashboard.putString(myName + "_Control Mode", this.getControlMode().name());
+		SmartDashboard.putNumber(myName + "_Speed", this.getSpeed());
+		SmartDashboard.putBoolean(myName+ "_Direction", this.getSpeed()>0);
+		
+		
 	}
 
 }
