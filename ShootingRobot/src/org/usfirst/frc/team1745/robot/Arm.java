@@ -16,10 +16,11 @@ private double current;
 	public Arm(P51Talon aMotor) {
 		arm=aMotor;
 		arm.changeControlMode(CANTalon.TalonControlMode.Position);
+		arm.enableBrakeMode(true);//enabling break mode
 		beenReset = false;
 		int absolutePosition = arm.getPulseWidthPosition() & 0xFFF;     
         arm.setEncPosition(absolutePosition);
-        arm.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
+        arm.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Absolute);
         arm.reverseSensor(false);
         /* set the peak and nominal outputs, 12V means full */
         arm.configNominalOutputVoltage(+0f, -0f);

@@ -32,8 +32,8 @@ public class Shooter {
 	private double speed; // the speed of the wheels
 	private double shootSpeed; // the speed when in shooting mode
 	private double intakeSpeed; // the speed the wheels go when intaking
-	PneumaticsSystem piston;
-	DoubleSolenoid solenoid;
+	private PneumaticsSystem piston;
+	private DoubleSolenoid solenoid;
 	public Shooter() {
 		// TODO Auto-generated constructor stub
 	}
@@ -53,8 +53,8 @@ public class Shooter {
         rMotor.changeControlMode(CANTalon.TalonControlMode.Speed);
         rMotor.reverseSensor(true);// reverse the Right motor sensor
         rMotor.reverseOutput(true); //reverse the right motor output
-        lMotor.enableBrakeMode(true); //enable fast breaking
-        rMotor.enableBrakeMode(true);
+        lMotor.enableBrakeMode(false); //disable fast breaking
+        rMotor.enableBrakeMode(false);
         this.setMode(Mode.OFF);
         arm = new Arm(this.aMotor);
         solenoid = new DoubleSolenoid(0, 1);
@@ -188,7 +188,14 @@ public class Shooter {
 			this.setMode(Mode.INTAKE);
 		}
 	}
-	
+	public void shoot()
+	{
+		piston.moveSolenoid(DoubleSolenoid.Value.kForward);
+	}
+	public void retract()
+	{
+		piston.moveSolenoid(DoubleSolenoid.Value.kReverse);
+	}
 	
 	
 	

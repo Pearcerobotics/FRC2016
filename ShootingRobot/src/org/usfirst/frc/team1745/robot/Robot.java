@@ -60,7 +60,8 @@ public class Robot extends IterativeRobot {
         myRobot = new RobotDrive(bLeft, fLeft, bRight, fRight);
         myShooter = new Shooter(lShooter, rShooter, aMotor, ballDetector);
         arm = new Arm(aMotor);
-        
+        myShooter.setIntakeSpeed(-.1);
+        myShooter.setShootSpeed(1);
         //turn on Grip image processing
         try {
             new ProcessBuilder("/home/lvuser/grip").inheritIO().start();
@@ -81,8 +82,7 @@ public class Robot extends IterativeRobot {
     	autoSelected = (String) chooser.getSelected();
 //		autoSelected = SmartDashboard.getString("Auto Selector", defaultAuto);
 		System.out.println("Auto selected: " + autoSelected);
-        myShooter.setIntakeSpeed(-1);
-        myShooter.setShootSpeed(1);
+        
         
     }
 
@@ -106,14 +106,31 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
-        myRobot.tankDrive(rJoystick, lJoystick);
-        myShooter.setMode(Shooter.Mode.INTAKE);
-        myShooter.setShootSpeed(sJoystick.getAxis(AxisType.kY));
-        if(sJoystick.getTrigger(null))
+        myRobot.tankDrive(rJoystick, lJoystick, true);
+       
+        
+        myShooter.setShootSpeed(lJoystick.getAxis(AxisType.kThrottle));
+        
+        //gather ball dumb
+        if(lJoystick.getTrigger(null))
         {
         	myShooter.setMode(Shooter.Mode.SHOOTING);
         }
-        arm.setPos(SmartDashboard.getNumber("armPosition", 0.0));
+        else
+        {
+        	myShooter.setMode(Shooter.Mode.INTAKE);
+        }
+        //shoot ball dumb
+        if(rJoystick.getTrigger(null))
+        {
+        	myShooter.shoot();
+        }
+        else
+        {
+        	myShooter.retract();;
+        }
+        //dumb arm control
+        arm.setPos((rJoystick.getAxis(AxisType.kThrottle)+1)/8);
         arm.setControl();
         this.talonsToDashboard();
                 
@@ -123,8 +140,8 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during test mode
      */
     public void testPeriodic() {
-       	myRobot.tankDrive(rJoystick, lJoystick);
-        myShooter.setMode(Shooter.Mode.INTAKE);
+       	myRobot.tankDrive(lJoystick, rJoystick, true);
+       // myShooter.setMode(Shooter.Mode.INTAKE);
         myShooter.setShootSpeed(sJoystick.getAxis(AxisType.kY));
         if(sJoystick.getTrigger(null))
         {
