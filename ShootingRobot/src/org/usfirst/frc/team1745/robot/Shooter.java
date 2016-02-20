@@ -4,6 +4,8 @@
 package org.usfirst.frc.team1745.robot;
 
 import edu.wpi.first.wpilibj.CANTalon;
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 /**
  * @author dg331474
@@ -30,6 +32,8 @@ public class Shooter {
 	private double speed; // the speed of the wheels
 	private double shootSpeed; // the speed when in shooting mode
 	private double intakeSpeed; // the speed the wheels go when intaking
+	PneumaticsSystem piston;
+	DoubleSolenoid solenoid;
 	public Shooter() {
 		// TODO Auto-generated constructor stub
 	}
@@ -53,7 +57,8 @@ public class Shooter {
         rMotor.enableBrakeMode(true);
         this.setMode(Mode.OFF);
         arm = new Arm(this.aMotor);
-        
+        solenoid = new DoubleSolenoid(0, 1);
+        piston = new PneumaticsSystem(solenoid, 2, 1);
 	}
 	/**
 	 * @return Distance Per Encoder Click in Inches

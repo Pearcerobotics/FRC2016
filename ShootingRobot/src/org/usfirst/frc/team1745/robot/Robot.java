@@ -34,6 +34,7 @@ public class Robot extends IterativeRobot {
     RobotDrive myRobot;
     BallDetector ballDetector;
     private final NetworkTable grip = NetworkTable.getTable("grip");
+    Arm arm;
 
    
     /**
@@ -57,7 +58,8 @@ public class Robot extends IterativeRobot {
         sJoystick = new Joystick(2);
         ballDetector = new BallDetector(0);
         myRobot = new RobotDrive(bLeft, fLeft, bRight, fRight);
-        myShooter = new Shooter(lShooter, rShooter, aMotor, ballDetector);        
+        myShooter = new Shooter(lShooter, rShooter, aMotor, ballDetector);
+        arm = new Arm(aMotor);
         
         //turn on Grip image processing
         try {
@@ -97,6 +99,7 @@ public class Robot extends IterativeRobot {
     	//Put default auto code here
             break;
     	}
+    	this.talonsToDashboard();
     }
 
     /**
@@ -110,14 +113,36 @@ public class Robot extends IterativeRobot {
         {
         	myShooter.setMode(Shooter.Mode.SHOOTING);
         }
-        
+        arm.setPos(SmartDashboard.getNumber("armPosition", 0.0));
+        arm.setControl();
+        this.talonsToDashboard();
+                
     }
     
     /**
      * This function is called periodically during test mode
      */
     public void testPeriodic() {
-    
+       	myRobot.tankDrive(rJoystick, lJoystick);
+        myShooter.setMode(Shooter.Mode.INTAKE);
+        myShooter.setShootSpeed(sJoystick.getAxis(AxisType.kY));
+        if(sJoystick.getTrigger(null))
+        {
+        	myShooter.setMode(Shooter.Mode.SHOOTING);
+        }
+    	arm.setPos(SmartDashboard.getNumber("armPosition", 0.0));
+        arm.setControl();
+        this.talonsToDashboard();
+    }
+    public void talonsToDashboard()
+    {
+    	fRight.toDashboard();
+    	bRight.toDashboard();
+    	fLeft.toDashboard();
+    	bLeft.toDashboard();
+    	lShooter.toDashboard();
+    	rShooter.toDashboard();
+    	aMotor.toDashboard();
     }
     
 }
