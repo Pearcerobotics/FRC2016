@@ -1,6 +1,7 @@
 package org.usfirst.frc.team1745.robot;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class BallDetector {
 
@@ -34,5 +35,11 @@ public class BallDetector {
 	public String toString() {
 		return "BallDetector [getBallStatus()=" + getBallStatus() + ", getBallDetectorPort()=" + getBallDetectorPort()
 				+ "]";
+	}
+
+	public void toDashboard() {
+		// TODO Auto-generated method stub
+		SmartDashboard.putBoolean("BallDetected", getBallStatus());
+		
 	}
 }

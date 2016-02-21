@@ -20,6 +20,7 @@ private double current;
 		beenReset = false;
 		int absolutePosition = arm.getPulseWidthPosition() & 0xFFF;     
         arm.setEncPosition(absolutePosition);
+        
         arm.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Absolute);
         arm.reverseSensor(false);
         /* set the peak and nominal outputs, 12V means full */
@@ -36,30 +37,30 @@ private double current;
         arm.setP(0.1);
         arm.setI(0.0); 
         arm.setD(0.0);  
-		
+		SmartDashboard.putNumber("armP", 0.1);
+		SmartDashboard.putNumber("armF", 0.0);
+		SmartDashboard.putNumber("armI", 0.0);
+		SmartDashboard.putNumber("armD", 0.0);
 		
 		// TODO Auto-generated constructor scrub
 	}
 	public void setPos(double pos)//sets the position of the arm
 	{
-		targetPos = pos;
-		arm.changeControlMode(TalonControlMode.Position);
+		this.targetPos = pos;
+		//arm.changeControlMode(TalonControlMode.Position);
 		arm.set(targetPos);
 	}
 	public double getPos()//gets the position of the arm
 	{
 		return arm.getPosition(); 
 	}
-	private void setPosToDefault()//sets the position of the arm to the default position
-	{
-		arm.setPosition(-currentPos);
-		currentPos = 0;
-	}
 	public void setControl()
 	{
 		arm.setP(SmartDashboard.getNumber("armP"));
 		arm.setI(SmartDashboard.getNumber("armI"));
 		arm.setD(SmartDashboard.getNumber("armD"));
+		SmartDashboard.putNumber("armPosition", arm.getPosition());
+		SmartDashboard.putNumber("armTargetPosition", arm.getSetpoint());
 	}
 
 }

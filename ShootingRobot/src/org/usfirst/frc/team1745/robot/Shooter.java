@@ -6,6 +6,7 @@ package org.usfirst.frc.team1745.robot;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * @author dg331474
@@ -32,7 +33,8 @@ public class Shooter {
 	private double speed; // the speed of the wheels
 	private double shootSpeed; // the speed when in shooting mode
 	private double intakeSpeed; // the speed the wheels go when intaking
-	private PneumaticsSystem piston;
+	private double f, p, i, d;
+	public PneumaticsSystem piston;
 	private DoubleSolenoid solenoid;
 	public Shooter() {
 		// TODO Auto-generated constructor stub
@@ -56,9 +58,33 @@ public class Shooter {
         lMotor.enableBrakeMode(false); //disable fast breaking
         rMotor.enableBrakeMode(false);
         this.setMode(Mode.OFF);
+        
+        
         arm = new Arm(this.aMotor);
         solenoid = new DoubleSolenoid(0, 1);
         piston = new PneumaticsSystem(solenoid, 2, 1);
+        f = 0.1097;
+        p = 0.22;
+        i = 0;
+        d = 0;
+        
+        //set control profile for shooter motors
+        rMotor.configNominalOutputVoltage(+0.0f, -0.0f);
+        lMotor.configNominalOutputVoltage(+0.0f, -0.0f);
+        rMotor.configPeakOutputVoltage(+12.0f, -12.0f);
+        lMotor.configPeakOutputVoltage(+12.0f, -12.0f);
+        
+        rMotor.setProfile(0);
+        lMotor.setProfile(0);
+        rMotor.setF(f);
+        lMotor.setF(f);
+        rMotor.setP(p);
+        lMotor.setP(p);
+        rMotor.setI(i);
+        lMotor.setI(i);
+        rMotor.setD(d);
+        lMotor.setD(d);
+        
 	}
 	/**
 	 * @return Distance Per Encoder Click in Inches
@@ -129,7 +155,7 @@ public class Shooter {
 	 * @return the speed
 	 */
 	public double getSpeed() {
-		return this.speed;
+		return this.speed / 18000;
 	}
 	/**
 	 * @param speed the speed to set
@@ -137,10 +163,10 @@ public class Shooter {
 	private void setSpeed(double speed) {
 		// look at http://www.ctr-electronics.com/Talon%20SRX%20Software%20Reference%20Manual.pdf for Speed documentation
 		if(speed < -1) speed = -1; // prevent out of bounds on Speed
-		if(speed > 1) speed =1;
-		this.speed = speed;
+		if(speed > 1) speed = 1;
+		this.speed = speed * 18000;
 		lMotor.set(this.speed);
-		rMotor.set(-this.speed);
+		rMotor.set(this.speed);
 	}
 	/**
 	 * @return the intakeSpeed
@@ -197,7 +223,33 @@ public class Shooter {
 		piston.moveSolenoid(DoubleSolenoid.Value.kReverse);
 	}
 	
-	
+	public void setControl(){
+		this.setF(SmartDashboard.getNumber("Shooter F", 0.1097));
+		this.setP(SmartDashboard.getNumber("Shooter P", 0.22));
+		this.setI(SmartDashboard.getNumber("Shooter I", 0));
+		this.setD(SmartDashboard.getNumber("Shooter D", 0));
+	}
+	private void setP(double p)
+	{
+		rMotor.setP(p);
+        lMotor.setP(p);
+	}
+	private void setI(double i)
+	{
+		rMotor.setI(i);
+        lMotor.setI(i);
+	}
+	private void setD(double d)
+	{
+		rMotor.setD(d);
+        lMotor.setD(d);
+	}
+	private void setF(double f)
+	{
+		rMotor.setD(f);
+        lMotor.setD(f);
+	}
+
 	
 
 }

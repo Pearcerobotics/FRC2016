@@ -30,7 +30,7 @@ public class Robot extends IterativeRobot {
     SendableChooser chooser;
     P51Talon fRight, bRight, fLeft, bLeft, lShooter, rShooter, aMotor;
     Shooter myShooter;
-    Joystick lJoystick, rJoystick, sJoystick;
+    Joystick lJoystick, rJoystick/* ystick*/;
     RobotDrive myRobot;
     BallDetector ballDetector;
     private final NetworkTable grip = NetworkTable.getTable("grip");
@@ -55,9 +55,15 @@ public class Robot extends IterativeRobot {
         aMotor = new P51Talon(9, "Arm Motor", Motors.WC775Pro, Breakers.amp40,14);
         lJoystick = new Joystick(0);
         rJoystick = new Joystick(1);
-        sJoystick = new Joystick(2);
+        //sJoystick = new Joystick(2);
         ballDetector = new BallDetector(0);
         myRobot = new RobotDrive(bLeft, fLeft, bRight, fRight);
+        //all motors on the robot are inverted for some reason
+        myRobot.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
+        myRobot.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
+        myRobot.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
+        myRobot.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
+        
         myShooter = new Shooter(lShooter, rShooter, aMotor, ballDetector);
         arm = new Arm(aMotor);
         myShooter.setIntakeSpeed(-.1);
@@ -107,9 +113,9 @@ public class Robot extends IterativeRobot {
      */
     public void teleopPeriodic() {
         myRobot.tankDrive(rJoystick, lJoystick, true);
-       
-        
-        myShooter.setShootSpeed(lJoystick.getAxis(AxisType.kThrottle));
+        myShooter.piston.toDashBoard();
+        /*
+        myShooter.setShootSpeed(lJoystick.getThrottle());
         
         //gather ball dumb
         if(lJoystick.getTrigger(null))
@@ -120,6 +126,7 @@ public class Robot extends IterativeRobot {
         {
         	myShooter.setMode(Shooter.Mode.INTAKE);
         }
+        */
         //shoot ball dumb
         if(rJoystick.getTrigger(null))
         {
@@ -130,9 +137,16 @@ public class Robot extends IterativeRobot {
         	myShooter.retract();;
         }
         //dumb arm control
-        arm.setPos((rJoystick.getAxis(AxisType.kThrottle)+1)/8);
-        arm.setControl();
+        //set throttle from -1 to 1 to 0 to 2 device by 8 to get 0-.25 then add 25 to set in .25-.50
+       
+        //arm off untill fixed
+        //arm.setPos(((lJoystick.getThrottle()+1)/8)+.25);
+       // SmartDashboard.putNumber("Throttle", lJoystick.getThrottle());
+       // arm.setControl();
+        //shooter control loop
+        myShooter.setControl();
         this.talonsToDashboard();
+        ballDetector.toDashboard();
                 
     }
     
@@ -142,13 +156,15 @@ public class Robot extends IterativeRobot {
     public void testPeriodic() {
        	myRobot.tankDrive(lJoystick, rJoystick, true);
        // myShooter.setMode(Shooter.Mode.INTAKE);
-        myShooter.setShootSpeed(sJoystick.getAxis(AxisType.kY));
-        if(sJoystick.getTrigger(null))
+        myShooter.setShootSpeed(lJoystick.getAxis(AxisType.kY));
+        if(lJoystick.getTrigger(null))
         {
         	myShooter.setMode(Shooter.Mode.SHOOTING);
         }
     	arm.setPos(SmartDashboard.getNumber("armPosition", 0.0));
         arm.setControl();
+        myShooter.piston.toDashBoard();
+     
         this.talonsToDashboard();
     }
     public void talonsToDashboard()
