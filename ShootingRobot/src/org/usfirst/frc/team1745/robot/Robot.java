@@ -66,6 +66,7 @@ public class Robot extends IterativeRobot {
         
         myShooter = new Shooter(lShooter, rShooter, aMotor, ballDetector);
         arm = new Arm(aMotor);
+        arm.setRange(.25, .53);
         myShooter.setIntakeSpeed(-.1);
         myShooter.setShootSpeed(1);
         //turn on Grip image processing
@@ -140,14 +141,14 @@ public class Robot extends IterativeRobot {
         //set throttle from -1 to 1 to 0 to 2 device by 8 to get 0-.25 then add 25 to set in .25-.50
        
         //arm off untill fixed
-        //arm.setPos(((lJoystick.getThrottle()+1)/8)+.25);
-       // SmartDashboard.putNumber("Throttle", lJoystick.getThrottle());
-       // arm.setControl();
+        //arm.setPos(lJoystick.getThrottle());
+        SmartDashboard.putNumber("Throttle", lJoystick.getThrottle());
+        arm.setControl();
         //shooter control loop
         myShooter.setControl();
         this.talonsToDashboard();
         ballDetector.toDashboard();
-                
+        myShooter.setDumbShooter(rJoystick, lJoystick);
     }
     
     /**
