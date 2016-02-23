@@ -148,7 +148,7 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("Throttle", lJoystick.getThrottle());
         arm.setControl();
         //shooter control loop
-        myShooter.setControl();
+        //myShooter.setControl();
         this.talonsToDashboard();
         ballDetector.toDashboard();
         myShooter.setDumbShooter(rJoystick, lJoystick);

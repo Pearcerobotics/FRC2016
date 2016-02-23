@@ -84,7 +84,7 @@ public class Shooter {
 		lMotor.configNominalOutputVoltage(+0.0f, -0.0f);
 		rMotor.configPeakOutputVoltage(+12.0f, -12.0f);
 		lMotor.configPeakOutputVoltage(+12.0f, -12.0f);
-
+/*
 		rMotor.setProfile(0);
 		lMotor.setProfile(0);
 		rMotor.setF(f);
@@ -95,7 +95,7 @@ public class Shooter {
 		lMotor.setI(i);
 		rMotor.setD(d);
 		lMotor.setD(d);
-
+*/
 	}
 
 	/**
@@ -276,18 +276,18 @@ public class Shooter {
 
 	public void setDumbShooter(Joystick rJoystick, Joystick lJoystick) {
 		if (rJoystick.getTrigger()) {
-			rMotor.changeControlMode(CANTalon.TalonControlMode.Voltage);
-			lMotor.changeControlMode(CANTalon.TalonControlMode.Voltage);
+			rMotor.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
+			lMotor.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
 			lMotor.set(1);
 			rMotor.set(-1);
 		} else if (lJoystick.getTrigger()) {
-			rMotor.changeControlMode(CANTalon.TalonControlMode.Voltage);
-			lMotor.changeControlMode(CANTalon.TalonControlMode.Voltage);
+			rMotor.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
+			lMotor.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
 			lMotor.set(-1);
 			rMotor.set(1);
 		} else {
-			rMotor.changeControlMode(CANTalon.TalonControlMode.Voltage);
-			lMotor.changeControlMode(CANTalon.TalonControlMode.Voltage);
+			rMotor.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
+			lMotor.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
 			lMotor.set(0);
 			rMotor.set(0);
 		}
