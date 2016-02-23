@@ -43,4 +43,11 @@ public class PneumaticsSystem {
 		SmartDashboard.putBoolean("Compressor State", this.compressor.getClosedLoopControl());
 		SmartDashboard.putNumber("Active System Pressor", this.getSystemPressure());
 	}
+	public void startCompressor()
+	{
+		if(!this.compressor.getClosedLoopControl())
+		{
+			this.compressor.setClosedLoopControl(true);
+		}
+	}
 }
