@@ -132,7 +132,7 @@ public class Robot extends IterativeRobot {
         }
         */
         //shoot ball dumb
-        if(rJoystick.getTrigger(null))
+        if(rJoystick.getRawButton(2))
         {
         	myShooter.shoot();
         }
