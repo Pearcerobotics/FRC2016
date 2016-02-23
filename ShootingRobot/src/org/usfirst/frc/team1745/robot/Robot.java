@@ -66,7 +66,7 @@ public class Robot extends IterativeRobot {
         
         myShooter = new Shooter(lShooter, rShooter, aMotor, ballDetector);
         arm = new Arm(aMotor);
-        arm.setRange(.25, .53);
+        arm.setRange(.282, .560);//low and high ranges set from real mesurements
         myShooter.setIntakeSpeed(-.1);
         myShooter.setShootSpeed(1);
         //turn on Grip image processing
@@ -113,8 +113,11 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
-        myRobot.tankDrive(rJoystick, lJoystick, true);
-        myShooter.piston.toDashBoard();
+        
+    	myRobot.tankDrive(rJoystick, lJoystick, true);
+        myShooter.piston.startCompressor();
+    	myShooter.piston.toDashBoard();
+        
         /*
         myShooter.setShootSpeed(lJoystick.getThrottle());
         
