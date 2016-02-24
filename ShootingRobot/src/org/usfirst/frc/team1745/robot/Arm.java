@@ -41,12 +41,12 @@ private double highRange=1;
         /* set closed loop gains in slot0 */
         arm.setProfile(0);
         arm.setF(0.0);
-        arm.setP(0.1);
+        arm.setP(0.9);
         arm.setI(0.0); 
-        arm.setD(0.0);  
-		SmartDashboard.putNumber("armP", 0.1);
+        arm.setD(0.001);  
+		SmartDashboard.putNumber("armP", 0.9);
 		SmartDashboard.putNumber("armF", 0.0);
-		SmartDashboard.putNumber("armI", 0.0);
+		SmartDashboard.putNumber("armI", 0.001);
 		SmartDashboard.putNumber("armD", 0.0);
 		
 		// TODO Auto-generated constructor scrub

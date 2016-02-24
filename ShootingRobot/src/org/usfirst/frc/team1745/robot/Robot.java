@@ -132,28 +132,31 @@ public class Robot extends IterativeRobot {
         }
         */
         //shoot ball dumb
-        if(rJoystick.getRawButton(2))
+    	if(rJoystick.getRawButton(2))
         {
-        	myShooter.shoot();
+    		SmartDashboard.putBoolean("Shooter", true);
+    		myShooter.shoot();
         }
         else
         {
-        	myShooter.retract();;
+        	SmartDashboard.putBoolean("Shooter", false);
+        	myShooter.retract();
         }
         //dumb arm control
         //set throttle from -1 to 1 to 0 to 2 device by 8 to get 0-.25 then add 25 to set in .25-.50
        
-        //arm off untill fixed
+        
         SmartDashboard.putNumber("arm angle", (arm.getPos()-.282)*360);
         SmartDashboard.putNumber("arm Pos", arm.getPos());
         arm.setPos(lJoystick.getThrottle());
         SmartDashboard.putNumber("Throttle", lJoystick.getThrottle());
         arm.setControl();
         //shooter control loop
-        //myShooter.setControl();
+        myShooter.setControl();
         this.talonsToDashboard();
         ballDetector.toDashboard();
         myShooter.setDumbShooter(rJoystick, lJoystick);
+       
     }
     
     /**

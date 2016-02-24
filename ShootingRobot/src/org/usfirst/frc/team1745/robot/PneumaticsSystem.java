@@ -4,14 +4,23 @@ import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+/**
+ * @author Developer
+ *
+ */
 public class PneumaticsSystem {
 
 	Compressor compressor;
 	DoubleSolenoid shooterPiston;
 	PressureSensor lowPressureSensor;
 
-	public PneumaticsSystem(DoubleSolenoid shooterPiston1, int PCMCanID, int lowPressureSensor) {
-		this.shooterPiston = shooterPiston1;
+	/**
+	 * @param shooterPiston1
+	 * @param PCMCanID
+	 * @param lowPressureSensor
+	 */
+	public PneumaticsSystem(int reversePistonID, int forwardPistonID, int PCMCanID, int lowPressureSensor) {
+		this.shooterPiston = new DoubleSolenoid(reversePistonID, forwardPistonID);
 		this.compressor = new Compressor(PCMCanID);
 		this.compressor.setClosedLoopControl(true);
 		this.lowPressureSensor = new PressureSensor(lowPressureSensor);
@@ -22,31 +31,40 @@ public class PneumaticsSystem {
 	 * @param targetPosition
 	 */
 	public void moveSolenoid(DoubleSolenoid.Value targetPosition) {
-			this.shooterPiston.set(targetPosition);
+		this.shooterPiston.set(targetPosition);
+		SmartDashboard.putString("Target Position", targetPosition.toString());
+		SmartDashboard.putString("Piston", this.shooterPiston.get().toString());
 	}
+		
+
 	/**
 	 * @return position of the solenoid
 	 */
 	public DoubleSolenoid.Value returnPositionSolenoid() {
-			return this.shooterPiston.get();
+		return this.shooterPiston.get();
 	}
-	
-	public double getSystemPressure()
-	{
+
+	/**
+	 * @return the system pressure
+	 */
+	public double getSystemPressure() {
 		return this.lowPressureSensor.getPressure();
 	}
-	
+
 	public String toString() {
-		return "State of compressor:"+this.compressor.getClosedLoopControl()+"Active Pressure"+this.getSystemPressure();
+		return "State of compressor:" + this.compressor.getClosedLoopControl() + "Active Pressure"
+				+ this.getSystemPressure();
 	}
+
 	public void toDashBoard() {
 		SmartDashboard.putBoolean("Compressor State", this.compressor.getClosedLoopControl());
-		SmartDashboard.putNumber("Active System Pressor", this.getSystemPressure());
+		SmartDashboard.putBoolean("Pressure Switch Value", this.compressor.getPressureSwitchValue());
+		SmartDashboard.putNumber("Active System Pressure", this.getSystemPressure());
+		
 	}
-	public void startCompressor()
-	{
-		if(!this.compressor.getClosedLoopControl())
-		{
+
+	public void startCompressor() {
+		if (!this.compressor.getClosedLoopControl()) {
 			this.compressor.setClosedLoopControl(true);
 		}
 	}

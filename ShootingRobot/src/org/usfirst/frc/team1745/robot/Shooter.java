@@ -43,7 +43,7 @@ public class Shooter {
 	private double intakeSpeed; // the speed the wheels go when intaking
 	private double f, p, i, d;
 	public PneumaticsSystem piston;
-	private DoubleSolenoid solenoid;
+	
 
 	public Shooter() {
 		// TODO Auto-generated constructor stub
@@ -61,10 +61,10 @@ public class Shooter {
 		this.ballDetector = ballDetector;
 		this.encoderClicksPerTurn = 1024;
 		this.wheelRadius = 4;
-		lMotor.changeControlMode(CANTalon.TalonControlMode.Speed); // set talons
+		lMotor.changeControlMode(CANTalon.TalonControlMode.PercentVbus); // set talons
 																	// to be set
 																	// by speed
-		rMotor.changeControlMode(CANTalon.TalonControlMode.Speed);
+		rMotor.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
 		rMotor.reverseSensor(true);// reverse the Right motor sensor
 		rMotor.reverseOutput(true); // reverse the right motor output
 		lMotor.enableBrakeMode(false); // disable fast breaking
@@ -72,8 +72,7 @@ public class Shooter {
 		this.setMode(Mode.OFF);
 
 		arm = new Arm(this.aMotor);
-		solenoid = new DoubleSolenoid(0, 1);
-		piston = new PneumaticsSystem(solenoid, 2, 1);
+		piston = new PneumaticsSystem(0, 1, 1, 0);
 		f = 0.1097;
 		p = 0.22;
 		i = 0;
@@ -84,7 +83,6 @@ public class Shooter {
 		lMotor.configNominalOutputVoltage(+0.0f, -0.0f);
 		rMotor.configPeakOutputVoltage(+12.0f, -12.0f);
 		lMotor.configPeakOutputVoltage(+12.0f, -12.0f);
-/*
 		rMotor.setProfile(0);
 		lMotor.setProfile(0);
 		rMotor.setF(f);
@@ -95,7 +93,6 @@ public class Shooter {
 		lMotor.setI(i);
 		rMotor.setD(d);
 		lMotor.setD(d);
-*/
 	}
 
 	/**
@@ -240,11 +237,11 @@ public class Shooter {
 	}
 
 	public void shoot() {
-		piston.moveSolenoid(DoubleSolenoid.Value.kForward);
+		this.piston.moveSolenoid(DoubleSolenoid.Value.kForward);
 	}
 
 	public void retract() {
-		piston.moveSolenoid(DoubleSolenoid.Value.kReverse);
+		this.piston.moveSolenoid(DoubleSolenoid.Value.kReverse);
 	}
 
 	public void setControl() {
@@ -276,18 +273,18 @@ public class Shooter {
 
 	public void setDumbShooter(Joystick rJoystick, Joystick lJoystick) {
 		if (rJoystick.getTrigger()) {
-			rMotor.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
-			lMotor.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
+			//rMotor.changeControlMode(CANTalon.TalonControlMode.Speed);
+			//lMotor.changeControlMode(CANTalon.TalonControlMode.Speed);
 			lMotor.set(1);
 			rMotor.set(-1);
 		} else if (lJoystick.getTrigger()) {
-			rMotor.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
-			lMotor.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
-			lMotor.set(-1);
-			rMotor.set(1);
+			//rMotor.changeControlMode(CANTalon.TalonControlMode.Speed);
+			//lMotor.changeControlMode(CANTalon.TalonControlMode.Speed);
+			lMotor.set(-.1);
+			rMotor.set(.1);
 		} else {
-			rMotor.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
-			lMotor.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
+			//rMotor.changeControlMode(CANTalon.TalonControlMode.Speed);
+			//lMotor.changeControlMode(CANTalon.TalonControlMode.Speed);
 			lMotor.set(0);
 			rMotor.set(0);
 		}
